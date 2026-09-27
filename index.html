@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ember Spire — لعبة بناء المجموعات</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ============================ START SCREEN ============================ -->
+  <section id="screen-start" class="screen">
+    <div class="ember-glow"></div>
+    <h1 class="title">EMBER <span>SPIRE</span></h1>
+    <p class="subtitle">ابنِ مجموعتك من الأوراق. اهبط عبر ستة طوابق. واجه ملك الجوف في القمة.</p>
+    <button id="btn-begin" class="btn btn-primary">ابدأ الصعود</button>
+
+    <div class="leaderboard-panel">
+      <h2>سجل الأبطال</h2>
+      <ol id="leaderboard-list" class="leaderboard-list"><li class="lb-empty">جارٍ التحميل...</li></ol>
+    </div>
+  </section>
+
+  <!-- ============================= GAME SCREEN ============================= -->
+  <section id="screen-game" class="screen hidden">
+
+    <header class="topbar">
+      <div class="floor-label" id="floor-label">—</div>
+      <div class="topbar-stats">
+        <span class="stat gold">⛃ <b id="gold-amount">0</b></span>
+        <span class="stat turn">دورة <b id="turn-number">1</b></span>
+      </div>
+    </header>
+
+    <div class="battlefield">
+      <div class="combatant player-side">
+        <div class="portrait player-portrait">🗡️</div>
+        <div class="combatant-info">
+          <div class="name">المغامر</div>
+          <div class="hp-bar"><div class="hp-fill" id="player-hp-fill"></div><span class="hp-text" id="player-hp-text">70/70</span></div>
+          <div class="badges">
+            <span class="badge block-badge" id="player-block-badge">🛡 0</span>
+            <span class="badge weak-badge hidden" id="player-weak-badge">☁ ضعف 0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="vs-divider">⚔</div>
+
+      <div class="combatant enemy-side" id="enemy-block">
+        <div class="portrait enemy-portrait" id="enemy-portrait">👹</div>
+        <div class="combatant-info">
+          <div class="name" id="enemy-name">—</div>
+          <div class="hp-bar enemy"><div class="hp-fill" id="enemy-hp-fill"></div><span class="hp-text" id="enemy-hp-text">0/0</span></div>
+          <div class="badges">
+            <span class="badge block-badge" id="enemy-block-badge">🛡 0</span>
+            <span class="badge vuln-badge hidden" id="enemy-vuln-badge">🎯 هش 0</span>
+            <span class="badge str-badge hidden" id="enemy-str-badge">💪 0</span>
+          </div>
+          <div class="intent" id="enemy-intent">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="log-panel" id="log-panel">مرحبًا بك في الأعماق.</div>
+
+    <footer class="hand-area">
+      <div class="deck-counts">
+        <span title="مجموعة السحب">🂠 <b id="draw-count">0</b></span>
+        <span title="مجموعة الرمي">🗑 <b id="discard-count">0</b></span>
+      </div>
+
+      <div class="hand" id="hand"></div>
+
+      <div class="energy-and-end">
+        <div class="energy-orb"><span id="energy-current">3</span>/<span id="energy-max">3</span></div>
+        <button id="btn-end-turn" class="btn btn-secondary">إنهاء الدور</button>
+      </div>
+    </footer>
+  </section>
+
+  <!-- ============================= OVERLAYS ============================= -->
+  <div id="overlay-reward" class="overlay hidden">
+    <div class="overlay-card">
+      <h2>غنيمة النصر</h2>
+      <p>اختر بطاقة واحدة لإضافتها إلى مجموعتك.</p>
+      <div class="reward-options" id="reward-options"></div>
+      <button id="btn-skip-reward" class="btn btn-ghost">تخطَّ الغنيمة</button>
+    </div>
+  </div>
+
+  <div id="overlay-rest" class="overlay hidden">
+    <div class="overlay-card">
+      <h2>موضع راحة</h2>
+      <p>استرح لتستعيد جزءًا من صحتك قبل مواصلة الهبوط.</p>
+      <button id="btn-rest" class="btn btn-primary">استرح (استعادة 30% من الصحة)</button>
+    </div>
+  </div>
+
+  <div id="overlay-gameover" class="overlay hidden">
+    <div class="overlay-card">
+      <h2 class="bad">لقد سقطت</h2>
+      <p id="gameover-message"></p>
+      <div class="name-entry">
+        <input id="input-name-defeat" maxlength="24" placeholder="اسمك للسجل">
+        <button id="btn-submit-defeat" class="btn btn-secondary">حفظ في السجل</button>
+      </div>
+      <button id="btn-restart-defeat" class="btn btn-primary">حاول مجددًا</button>
+    </div>
+  </div>
+
+  <div id="overlay-victory" class="overlay hidden">
+    <div class="overlay-card">
+      <h2 class="good">قهرت الأعماق</h2>
+      <p id="victory-message"></p>
+      <div class="name-entry">
+        <input id="input-name-victory" maxlength="24" placeholder="اسمك للسجل">
+        <button id="btn-submit-victory" class="btn btn-secondary">حفظ في السجل</button>
+      </div>
+      <button id="btn-restart-victory" class="btn btn-primary">اصعد مجددًا</button>
+    </div>
+  </div>
+
+</div>
+
+<script src="js/game.js"></script>
+</body>
+</html>

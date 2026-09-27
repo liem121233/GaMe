@@ -1,0 +1,5 @@
+إضافات PHP المطلوبة للمشروع:
+
+extension=pdo_sqlite
+extension=sqlite3
+extension=mbstring

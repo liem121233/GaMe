@@ -1,0 +1,180 @@
+أيوه، ينفع جدًا تعمل Ember Spire بالكامل باستخدام Kiro، وبالتفصيل كمان.
+ولو قصدك: نفتح المشروع في Kiro ونرتب الملفات ونشغله ونطوره خطوة بخطوة، أقدر أمشي معاك من الصفر.
+
+بما إن اللعبة الحالية PHP + SQLite + JavaScript، فـ Kiro مناسب جدًا لها.
+
+الشكل اللي هنشتغل عليه داخل Kiro
+Ember Spire/
+│
+├── index.html
+├── common.php
+├── config.php
+├── schema.sql
+├── game.db
+│
+├── api/
+│   ├── start.php
+│   ├── state.php
+│   ├── play.php
+│   ├── end_turn.php
+│   ├── advance.php
+│   └── leaderboard.php
+│
+├── css/
+│   └── style.css
+│
+└── js/
+    └── game.js
+
+وده متوافق مع طريقة كتابة الملفات اللي عندك؛ مثلًا ملفات الـAPI تستخدم ../common.php، وواجهة index.html تستدعي css/style.css وjs/game.js.
+
+تشغيلها من Kiro
+
+افتح مجلد Ember Spire في Kiro، وبعدها افتح Terminal واكتب:
+
+php -v
+
+ثم:
+
+php -S localhost:8000
+
+بعدها افتح:
+
+http://localhost:8000
+
+مهم: ما تفتحش index.html بالدبل كليك، لأن اللعبة تعتمد على PHP وSQLite في الـAPI. ملف التشغيل نفسه يوضح أن تشغيلها يكون من خلال خادم PHP المحلي.
+
+ولو قصدك "هل أقدر أبني لعبة زي دي من الصفر في Kiro؟"
+
+نعم. ونقدر نعملها على مراحل:
+
+إنشاء المشروع.
+إنشاء قاعدة SQLite.
+بناء نظام اللاعب.
+نظام الـHP والطاقة.
+نظام البطاقات.
+نظام الأعداء.
+نظام القتال.
+الطوابق الستة.
+الزعيم النهائي.
+نظام حفظ اللعبة.
+الـLeaderboard.
+تحسين الرسومات والواجهة.
+إضافة أصوات وحركات.
+تحويلها في النهاية إلى لعبة متكاملة تعمل محليًا.
+
+وبما أن جهازك ضعيف جدًا، PHP + SQLite + JavaScript خيار خفيف نسبيًا، ومش محتاج Unity أو محرك ألعاب ثقيل.
+
+لو تقصد تحديدًا "عايز أبني Ember Spire من الصفر داخل Kiro، وعايز كل خطوة والأوامر والملفات والكود بالتفصيل"، أقدر أبدأ معاك من الخطوة 1 داخل Kiro.
+
+php : The term 'php' is not recognized as the name of a cmdlet, function, script file, or 
+operable program. Check the spelling of the name, or if a path was included, verify that the 
+path is correct and try again.
+At line:1 char:1
++ php -v
++ ~~~
+    + CategoryInfo          : ObjectNotFound: (php:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+أيوه، المشكلة واضحة: PHP موجود عندك غالبًا، لكن Kiro/PowerShell مش شايف مساره في PATH.
+
+وبحسب إعدادك السابق، PHP عندك موجود في:
+
+C:\php\php.exe
+
+خلينا نصلحها خطوة بخطوة.
+
+1. جرّب PHP بالمسار الكامل
+
+في Terminal داخل Kiro اكتب:
+
+C:\php\php.exe -v
+
+لو ظهر شيء مثل:
+
+PHP 8.5.11 (cli)
+
+يبقى PHP سليم، والمشكلة فقط في PATH.
+
+2. شغّل اللعبة مؤقتًا بدون تعديل PATH
+
+وأنت داخل مجلد Ember Spire في Kiro، اكتب:
+
+C:\php\php.exe -S localhost:8000
+
+ثم افتح المتصفح على:
+
+http://localhost:8000
+
+وسيظل Terminal مفتوحًا أثناء تشغيل اللعبة.
+
+3. نخلي php يشتغل مباشرة
+
+لو الخطوة الأولى نجحت، افتح CMD كمسؤول وأضف:
+
+setx PATH "%PATH%;C:\php"
+
+بعدها اقفل Kiro وافتحه من جديد.
+
+ثم جرّب:
+
+php -v
+لو ظهر خطأ في اللعبة
+
+بعد تشغيل:
+
+C:\php\php.exe -S localhost:8000
+
+لو ظهر أي خطأ في Kiro، انسخه هنا كما هو، وأنا أقولك بالضبط نصلحه منين.
+
+روسيظل Terminal مفتوحًا أثناء تشغيل اللعبة.
+
+3. نخلي php يشتغل مباشرة
+
+لو الخطوة الأولى نجحت، افتح CMD كمسؤول وأضف:
+
+setx PATH "%PATH%;C:\php"
+
+أيوه، بالضبط. لو عايز تخلي الأمر php يشتغل من أي Terminal، اعمل كده:
+
+1. افتح CMD كمسؤول
+
+من Start اكتب:
+
+cmd
+
+ثم Run as administrator.
+
+2. الصق الأمر ده
+setx PATH "%PATH%;C:\php"
+
+واضغط Enter.
+
+المفروض يظهر:
+
+SUCCESS: Specified value was saved.
+3. مهم جدًا
+
+اقفل CMD وKiro بالكامل، ثم افتح Kiro من جديد.
+
+بعدها افتح Terminal جديد داخل Kiro واكتب:
+
+php -v
+
+لو ظهر:
+
+PHP 8.5.11 (cli)
+
+يبقى تمام ✅
+
+4. بعدها شغّل Ember Spire
+
+داخل مجلد اللعبة:
+
+php -S localhost:8000
+
+ثم افتح:
+
+http://localhost:8000
+
+ملاحظة: لو setx أعطاك تحذيرًا أو php -v ما زال لا يعمل بعد إعادة فتح Kiro، لا نكرر الأمر؛ ابعتلي الناتج وسأعطيك طريقة إضافة C:\php إلى PATH من إعدادات Windows مباشرة.
